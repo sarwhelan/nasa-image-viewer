@@ -1,0 +1,14 @@
+#pics {
+  line-height: 0;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 0px;
+  -moz-column-count: 3;
+  -moz-column-gap: 0px;
+  column-count: 3;
+  column-gap: 0px;
+}
+
+#pics img {
+  width: 50% !important;
+  height: auto !important;
+}

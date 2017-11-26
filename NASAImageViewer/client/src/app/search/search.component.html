@@ -1,0 +1,6 @@
+<input #searchWords type="text" id="searchInput" placeholder="search">
+<button (click)="sendSearchWords(searchWords.value)">search!</button>
+<div *ngFor="let link of links" id="pics">
+    <!--img src='{{link}}'/>-->
+      <img src='{{link}}'/>
+</div>
