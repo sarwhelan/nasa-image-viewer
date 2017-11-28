@@ -7,6 +7,17 @@ export class RetrieveImagesService {
   individualWords;
   index;
   val = [];
+  HttpClient = function() {
+    this.get = function(aURL, callback) {
+      var httpReq = new XMLHttpRequest();
+      httpReq.onreadystatechange = function() {
+        if (httpReq.readyState == 4 && httpReq.status == 200)
+          callback(httpReq.responseText);
+      }
+      httpReq.open("GET", aURL, true);
+      httpReq.send(null);
+    }
+  }
 
   constructor() { }
 
@@ -27,12 +38,11 @@ export class RetrieveImagesService {
 
     this.searchString += "&media_type=image";
     console.log("search string: " + this.searchString);
-    var cli = new HttpClient();
+    var cli = new this.HttpClient();
     var imgLinks = [];
 
+
     cli.get(this.searchString, function(response) {
-      // do stuff w response here
-      // console.log(response.collection.items[0].links[0].href);
       var obj = JSON.parse(response);
       var numLinks = obj.collection.items.length;
       var linkNum;
@@ -46,18 +56,6 @@ export class RetrieveImagesService {
     this.individualWords = "";
     this.searchString = "https://images-api.nasa.gov/search?";
     return imgLinks;
-  }
-
-  var HttpClient = function() {
-    this.get = function(aURL, callback) {
-      var httpReq = new XMLHttpRequest();
-      httpReq.onreadystatechange = function() {
-        if (httpReq.readyState == 4 && httpReq.status == 200)
-          callback(httpReq.responseText);
-      }
-      httpReq.open("GET", aURL, true);
-      httpReq.send(null);
-    }
   }
 
 }

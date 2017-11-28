@@ -1,0 +1,13 @@
+p {
+  padding-left: 200px;
+  padding-top: 10px;
+  padding-right: 200px;
+  padding-bottom: 10px;
+}
+
+a {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
