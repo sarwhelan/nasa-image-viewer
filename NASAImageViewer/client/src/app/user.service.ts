@@ -33,18 +33,21 @@ export class UserService {
   }
 
   login(email:string, password:string) {
-    console.log("in login() userservice");
+    console.log("in login() within user service");
     var userInfo = {
-      'userName': email,
+      'username': email,
       'password': password
     }
-    return this.http.post('/api/login', userInfo)
+    return this.http.post('http://localhost:8080/api/login', userInfo)
       .map((res: any) => {
         if (res.success) { // if sucessfully logged in
           localStorage.setItem('auth_token', res.auth_token);
           this.loggedIn = true;
           this.email = email; // use to get their collections
           return res.success;
+        }
+        else {
+          console.log("user service says: user was not logged in");
         }
       });
   }

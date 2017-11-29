@@ -58,12 +58,7 @@ var bcrypt = require('bcrypt');
 var User = require('./models/user');
 var validator = require('validator');
 
-router.use(function(req, res, next) {
-    console.log('Something is happening');
-    next();
-});
-
-router.route('/login')
+/* router.route('/login')
 
   .post(function(req, res) {
     var usr = new User();
@@ -91,5 +86,6 @@ router.route('/login')
 
 
   });
+  */
 
 module.exports = app;
