@@ -1,4 +1,4 @@
 ./NASAImageViewer/client/node_modules/
 ./NASAImageViewer/server/node_modules/
 .DS_Store
-/client/e2e
+.NASAImageViewer/client/e2e/
