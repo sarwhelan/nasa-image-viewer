@@ -1,0 +1,35 @@
+form {
+  margin-top: 50px;
+  margin-right: center;
+  margin-left: auto;
+  float: left;
+}
+
+label {
+  margin-top: 5px;
+  margin-left: 40px;
+  margin-right: 40px;
+  float: center;
+  display: inline-block;
+  text-align: right;
+}
+
+input {
+  width: 500px;
+  float: right;
+}
+
+#wrap {
+  margin-left: auto;
+  margin-right: auto;
+  height: auto;
+  width: auto;
+}
+
+#alert {
+  margin-top: 70px;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+  float: left;
+}

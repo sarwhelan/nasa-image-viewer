@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;
 
-// connect to mongoose and set up email verification dependencies
+// connect to mongoose
 var mongoose = require('mongoose');
 try {
     mongoose.Promise = global.Promise;
@@ -24,6 +24,7 @@ mongoose.connect('mongodb://127.0.0.1/collections', {
   useMongoClient: true
 });
 // ---------------------------
+
 
 var logger = require('morgan'); // for logging requests
 app.use(logger('dev'));
@@ -53,39 +54,5 @@ app.listen(8080, function () {
     console.log('Server listening on port 8080!');
 });
 
-var router = express.Router();
-var bcrypt = require('bcrypt');
-var User = require('./models/user');
-var validator = require('validator');
-
-/* router.route('/login')
-
-  .post(function(req, res) {
-    var usr = new User();
-    // sanitize input
-    usr.userName = validator.escape(req.body.userName);
-    usr.password = validator.escape(req.body.password);
-
-    User.findOne({'userName': usr.userName}, function(err, user) {
-      if(err)
-        return res.send(err);
-      if (!user) // user wasn't found
-        return res.json('Error: Email or password is incorrect.');
-      // take password inputted and compare w/ password in system, going to use bcrypt
-      bcrypt.compare(usr.password, user.password, function(err, correct) {
-        if(err)
-          return res.send(err);
-        else if(!correct) // not matching
-          return res.json('Error: Email or password is incorrect.');
-        else { // passwords match
-          return res.success;
-        }
-
-      })
-    });
-
-
-  });
-  */
 
 module.exports = app;

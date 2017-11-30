@@ -4,33 +4,59 @@ import { Observable } from 'rxjs';
 import { HttpModule } from '@angular/http';
 import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/from';
 
 @Injectable()
 export class UserService {
 
   private loggedIn = false;
   private email = "";
+  private pass="";
 
   constructor(private http: HttpClient) {
     this.loggedIn = !!localStorage.getItem('auth_token');
   }
 
-  createUser(email:string, password:string) {
+  createUser(email:string, password:string, callBackFunction) {
+    console.log("in createUser, userService: " + this.email + " " + this.pass);
+
     var userInfo = {
-      'userName': email,
-      'password': password
+      'username': email,
+      'password': password,
+      'type': "register"
     }
 
-    return this.http.post('/register', userInfo).map(this.extractMsg);
+    return this.http.post('http://localhost:8080/api/register', userInfo)
+      .map((res: any) => {
+        if(res.success) {
+          console.log("successful registration");
+        }
+        else {
+          console.log("unsuccessful registration");
+        }
+      })
+
+    /*
+      fetch('http://localhost:8080/api/register', {
+      method: 'post',
+      headers: {'Content-type':'application-json'},
+      body: JSON.stringify({username: this.email, password: this.pass, type: 'register'})
+    }).then(function(response){
+      console.log("response: " + response['msg']);
+      callBackFunction(response['msg']);
+    }).catch(function () {
+      console.log("error in createUser, userService");
+    })
+    */
   }
 
-  private extractMsg(res: Response) {
+  /*private extractMsg(res: Response) {
       let body;
-      if (res.text()) { // only get json if text exists
+      if (1) { // only get json if text exists
           body = res.json();
       }
       return body || {};
-  }
+  */
 
   login(email:string, password:string) {
     console.log("in login() within user service");
@@ -39,17 +65,23 @@ export class UserService {
       'password': password
     }
     return this.http.post('http://localhost:8080/api/login', userInfo)
-      .map((res: any) => {
-        if (res.success) { // if sucessfully logged in
+      .map((res:any) => {
+        if(res.success == "true") {
           localStorage.setItem('auth_token', res.auth_token);
           this.loggedIn = true;
-          this.email = email; // use to get their collections
-          return res.success;
+          this.email = email;
         }
-        else {
-          console.log("user service says: user was not logged in");
-        }
-      });
+        return res.success;
+      })
+  }
+
+  logout() {
+    this.loggedIn = false;
+    this.email = "";
+  }
+
+  setCurrentUser(username:string) {
+    this.email = username;
   }
 
 
