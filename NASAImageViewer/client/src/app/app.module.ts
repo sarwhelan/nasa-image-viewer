@@ -15,6 +15,8 @@ import { RegisterComponent } from './register/register.component';
 import { DmcaComponent } from './dmca/dmca.component';
 import { CollectionsComponent } from './collections/collections.component';
 import { CommonModule } from '@angular/common';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { LoadUserCollectionsService } from './load-user-collections.service';
 
 
 @NgModule({
@@ -26,6 +28,7 @@ import { CommonModule } from '@angular/common';
     RegisterComponent,
     DmcaComponent,
     CollectionsComponent,
+    PrivacyPolicyComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +37,7 @@ import { CommonModule } from '@angular/common';
     routing,
     CommonModule
   ],
-  providers: [RetrieveImagesService, UserService],
+  providers: [RetrieveImagesService, UserService, LoadUserCollectionsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

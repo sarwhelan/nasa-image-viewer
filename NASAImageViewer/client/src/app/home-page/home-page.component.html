@@ -1,14 +1,27 @@
-<p>
+<p id="top">
   <b>Welcome!</b><br> NASA Image Viewer provides an easy way to
   search and make collections out of your favourite space photos,
-  view other collections, and rate them.
+  view other collections, and rate them.<br>
   If you'd like to make your own collections, please <b>register</b>
   for an account or <b>login</b> with your credentials.
-  <b>Enjoy!</b>
+  <b>Enjoy!</b><br><br>
+  <b>P.S. below are our top 10 image collections.<br> Register or Login to see more and start exploring!</b>
 </p>
 
-<a class="btn btn-primary" href="/register" role="button">Register</a>
-<a class="btn btn-primary" href="/login" role="button">Login</a>
+<a id="button" class="btn btn-primary" href="/register" role="button">Register</a>
+<a id="button" class="btn btn-primary" href="/login" role="button">Login</a>
 
-
-<!--- image collections here --->
+<div *ngIf="readyToDisplay">
+  <div class="card-group">
+    <div *ngFor="let collection of collections" id="collections">
+      <div class="card" style="width: 15rem;">
+        <img class="card-img-top" src="{{collection.img}}" alt="Card image cap">
+        <div class="card-block">
+          <h4 class="card-title">{{collection.name}}</h4>
+          <p class="card-text">{{collection.rating}} stars</p>
+          <a href="#" class="btn btn-primary">View Full Collection</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

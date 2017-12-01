@@ -6,6 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { SearchComponent } from './search/search.component'; // for authenticated users
 import { DmcaComponent } from './dmca/dmca.component';
 import { CollectionsComponent } from './collections/collections.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component'
 
 export const routes: Routes = [
   { path: 'home', component: HomePageComponent},
@@ -14,6 +15,7 @@ export const routes: Routes = [
   { path: 'search', component: SearchComponent },
   { path: 'dmca', component: DmcaComponent},
   { path: 'collections', component: CollectionsComponent},
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full'}
 ];
 

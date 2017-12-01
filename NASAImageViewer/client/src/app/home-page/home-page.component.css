@@ -1,13 +1,24 @@
-p {
+#top {
   padding-left: 200px;
   padding-top: 10px;
   padding-right: 200px;
   padding-bottom: 10px;
 }
 
-a {
+#button {
   padding-left: 20px;
   padding-right: 20px;
   margin-left: 20px;
   margin-right: 20px;
+}
+
+.card {
+  padding: 10px;
+  margin: 20px;
+  margin-top: 40px;
+}
+
+.card-group {
+  margin-left: 100px;
+  margin-right: 100px;
 }

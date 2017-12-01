@@ -1,4 +1,5 @@
 var User = require('../models/user');
+var Collection = require ('../models/collection');
 var TempUser = require('../models/tempUser');
 var validator = require('validator');
 var express = require('express');
@@ -101,7 +102,7 @@ router.route('/login')
         return res.send(err);
       if (!user) { // user wasn't found
         console.log("user doesn't exist");
-        return res.json({message:'Error: Email or password is incorrect.'});
+        return res.json({msg: "unsucessful"});
       }
       /*
       if (usr.password == user.password) {
@@ -111,9 +112,6 @@ router.route('/login')
         return res.json({msg: 'unsuccessful'});
       }
       */
-
-      // gonna ignore this for now...
-      // take password inputted and compare w/ password in system, going to use bcrypt
       bcrypt.compare(usr.password, user.password, function(err, correct) {
         if(err)
           return res.send(err);
@@ -126,16 +124,16 @@ router.route('/login')
           return res.json({msg: "success"});
         }
 
-      }) // ----------
+      })
     });
-
 }); // --- end of POST /login
+// END OF /login route ---------------------------------------------------------
 
 // register new users
 router.route('/register')
 
   .post(function(req, res) {
-    console.log("grr: " + req.body.username);
+
     email = validator.escape(req.body.username);
     pass = validator.escape(req.body.password);
     console.log("email: " + this.email + " pass: " + this.pass);
@@ -156,8 +154,6 @@ router.route('/register')
           if(err) {
             return res.json({msg: "error"});
           }
-          console.log("RESULT:"  + result);
-
           if(result) {
             return res.json({msg: "taken"});
           }
@@ -173,11 +169,9 @@ router.route('/register')
               User.create({username: this.email, password: this.pass}, function(err, instance) {
                 if(err) {
                   return res.json({msg: "error"});
-                  console.log("bleh in api");
                 }
                 else {
                   return res.json({msg: "success"});
-                  console.log("woot");
                 }
               })
             })
@@ -242,8 +236,9 @@ router.route('/register')
         });
     } */
 }); // ---- end of POST /register
+// END OF /register route ------------------------------------------------------
 
-router.route('/email-verification/:URL')
+router.route('/email-verification/:URL') // this isn't working
 
   .get(function(req, res) {
           var url = req.params.URL;
@@ -265,7 +260,10 @@ router.route('/email-verification/:URL')
               }
           });
 }); // ---- end of GET /email-verification/:URL
+// END OF /email-verification:URL route ----------------------------------------
 
+
+// returns list of all users in the system along with their hashed password
 router.route('/getUsers')
   .get(function(req, res) {
 
@@ -282,10 +280,12 @@ router.route('/getUsers')
         });
         res.send(userMap);
     });
-  });
+  }); // ---- end of GET /getUsers
+// END OF /getUsers/ route -----------------------------------------------------
 
-router.route('/removeUser/:id') // FOR ADMIN USER TO REMOVE ACCOUNTS
-  .post(function(req, res) {
+// for admin user to take down accounts, part of DMCA
+router.route('/removeUser/:id')
+  .delete(function(req, res) {
     bye = req.params.id;
     User.remove({_id: bye}, function(err) {
       if(err) {
@@ -296,8 +296,100 @@ router.route('/removeUser/:id') // FOR ADMIN USER TO REMOVE ACCOUNTS
         res.json({msg: 'wahooo'});
       }
     });
-  });
+  }); // end of DELETE /removeUser/:id
+// END OF /removeuser/:id route ------------------------------------------------
 
+// get stuff related to image collections
+router.route('/collections')
+
+  // GET ALL COLLECTIONS
+  .get(function(req, res) {
+    Collection.find({}, function(err, collections) {
+      var collectionMap = {};
+      collections.forEach(function(collection) {
+        collectionMap[collection._id] = collection;
+      });
+      res.send(collectionMap);
+    })
+  }) // ---- end of GET /collections
+
+  // CREATE A NEW COLLECTION
+  .post(function(req, res) {
+    console.log("ugh" + req.body.name + req.body.description);
+    owner = req.body.owner;
+    name = validator.escape(req.body.name);
+    description = validator.escape(req.body.description);
+    visibility = req.body.visibility;
+    imgLinks = req.body.imgLinks;
+    rating = req.body.rating;
+
+    var newCollection = new Collection({
+      owner: this.owner,
+      name: this.name,
+      description: this.description,
+      visibility: this.visibility,
+      imgLinks: this.imgLinks,
+      rating: this.rating
+    })
+
+    Collection.create(newCollection, function(err, instance) {
+      if(err) {
+        console.log("new collection not created");
+        return res.json({msg: "unsuccessful"});
+      }
+      if(instance) {
+        console.log("collection created");
+        return res.json({msg: "success"});
+      }
+    })
+
+  }) // ---- end of POST /collections
+// END OF /collections route ---------------------------------------------------
+
+router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is username
+  .delete(function(req, res) { //  DELETE A COLLECTION BASED ON COLLECTION _ID
+    id = req.params.x;
+    Collection.remove({_id: id}, function(err, resp) {
+      if(err){
+        console.log("error in deleting individual collection");
+        return res.json({msg: "unsuccessful"});
+      }
+      else {
+        console.log("deleted collection");
+        return res.json({msg: "success"});
+      }
+    })
+  }) // ---- end of DELETE /collections:x
+
+  .get(function(req, res) { // GET TOP 10 COLLECTIONS OR ALL COLLECTIONS BY A SPECIFIED USER
+    if (req.params.x == "ten") { // IF GETTING TOP 10...
+      Collection.find({visibility: 'public'}).sort({rating: -1}).limit(10).exec(function(err, collections) {
+        if(err) {
+          return res.json({msg: "unsuccessful"});
+          console.log("error in getting top 10");
+        }
+        var collectionMap = {};
+        collections.forEach(function(collection) {
+          collectionMap[collection._id] = collection;
+        });
+        return res.send(collectionMap);
+      })
+    }
+    else {
+      username = req.params.x;
+      Collection.find({owner: username}, function(err, collections) {
+        var collectionMap = {};
+        collections.forEach(function(collection) {
+          collectionMap[collection._id] = collection;
+        });
+        res.send(collectionMap);
+      })
+    }
+  });
+// END OF /collections/:x route ------------------------------------------------
+
+
+// initial route for all routes is /api
 app.use('/api', router);
 
 app.use(function (request, response, next) {
