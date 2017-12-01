@@ -16,12 +16,28 @@
   </form>
   </div>
 
-  <div id="alert" *ngIf="emailSent" class="alert alert-info" role="alert">
-    <strong>A confirmation email is on the way!</strong> You'll need to confirm your account before logging in.
+  <div id="alert" *ngIf="error" class="alert alert-danger" role="alert">
+    <strong>Looks like there was an error.</strong> Please try again or come back later.
   </div>
 
-  <div id="alert" *ngIf="error" class="alert alert-danger" role="alert">
-  <strong>Looks like there was an error.</strong> <a href="#" class="alert-link">Please try again.</a>
-</div>
+  <div id="alert" *ngIf="noEmail" class="alert alert-danger" role="alert">
+    <strong>You need to enter an email address to register.</strong>
+  </div>
+
+  <div id="alert" *ngIf="invalidEmail" class="alert alert-danger" role="alert">
+    <strong>You need to enter a valid email address to register.</strong>
+  </div>
+
+  <div id="alert" *ngIf="noPass" class="alert alert-danger" role="alert">
+    <strong>You need to enter a password to register.</strong>
+  </div>
+
+  <div id="alert" *ngIf="taken" class="alert alert-info" role="alert">
+    <strong>Hmmm!</strong> Looks like this email address is already in use. Please try another or <a href="/login" class="alert-link">login.</a>
+  </div>
+
+  <div id="alert" *ngIf="success"class="alert alert-success" role="alert">
+    <strong>Woohoo!</strong> You just made an account. Go <a href="/login" class="alert-link">login!</a>
+  </div>
 
 </div>

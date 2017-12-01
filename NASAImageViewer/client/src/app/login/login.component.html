@@ -20,4 +20,12 @@
     <b>Woops!</b> Looks like your email address or password is incorrect. Please try again.
   </div>
 
+  <div id="alert" *ngIf="noEmail" class="alert alert-danger" role="alert">
+    <strong>You need to enter an email address to login.</strong>
+  </div>
+
+  <div id="alert" *ngIf="noPass" class="alert alert-danger" role="alert">
+    <strong>You need to enter a password to login.</strong>
+  </div>
+
 </div>

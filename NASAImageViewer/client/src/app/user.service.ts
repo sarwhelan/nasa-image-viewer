@@ -11,30 +11,29 @@ export class UserService {
 
   private loggedIn = false;
   private email = "";
-  private pass="";
+  private pass= "";
+  currentUser;
 
   constructor(private http: HttpClient) {
     this.loggedIn = !!localStorage.getItem('auth_token');
   }
 
-  createUser(email:string, password:string, callBackFunction) {
+  createUser(email:string, password:string) {
+    this.email = email;
+    this.pass = password;
     console.log("in createUser, userService: " + this.email + " " + this.pass);
 
     var userInfo = {
-      'username': email,
-      'password': password,
-      'type': "register"
+      'username': this.email,
+      'password': this.pass,
+      'type': 'register'
     }
 
     return this.http.post('http://localhost:8080/api/register', userInfo)
       .map((res: any) => {
-        if(res.success) {
-          console.log("successful registration");
-        }
-        else {
-          console.log("unsuccessful registration");
-        }
+        return res;
       })
+    }
 
     /*
       fetch('http://localhost:8080/api/register', {
@@ -48,7 +47,7 @@ export class UserService {
       console.log("error in createUser, userService");
     })
     */
-  }
+
 
   /*private extractMsg(res: Response) {
       let body;
@@ -58,6 +57,15 @@ export class UserService {
       return body || {};
   */
 
+  userLoggedIn() {
+    if (this.loggedIn) {
+      console.log(this.currentUser);
+      return this.currentUser;
+    }
+    else
+      return null;
+  }
+
   login(email:string, password:string) {
     console.log("in login() within user service");
     var userInfo = {
@@ -66,12 +74,15 @@ export class UserService {
     }
     return this.http.post('http://localhost:8080/api/login', userInfo)
       .map((res:any) => {
-        if(res.success == "true") {
+        if(res.msg == "success") {
           localStorage.setItem('auth_token', res.auth_token);
           this.loggedIn = true;
-          this.email = email;
+          this.currentUser = userInfo.username;
+          console.log(this.userLoggedIn());
+          return true;
         }
-        return res.success;
+        console.log(this.userLoggedIn());
+        return false;
       })
   }
 
@@ -79,11 +90,5 @@ export class UserService {
     this.loggedIn = false;
     this.email = "";
   }
-
-  setCurrentUser(username:string) {
-    this.email = username;
-  }
-
-
 
 }

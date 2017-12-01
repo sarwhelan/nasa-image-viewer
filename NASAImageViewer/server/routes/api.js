@@ -103,12 +103,14 @@ router.route('/login')
         console.log("user doesn't exist");
         return res.json({message:'Error: Email or password is incorrect.'});
       }
+      /*
       if (usr.password == user.password) {
         console.log("matching!");
-        return res.json({success: "true"});
+        return res.json({msg: 'success'});
       } else {
-        return res.json({success: "false"});
+        return res.json({msg: 'unsuccessful'});
       }
+      */
 
       // gonna ignore this for now...
       // take password inputted and compare w/ password in system, going to use bcrypt
@@ -117,11 +119,11 @@ router.route('/login')
           return res.send(err);
         else if(!correct) {// not matching
           console.log("passwords don't match");
-          return res.json({message:'Error: Email or password is incorrect.'});
+          return res.json({msg: "unsuccessful"});
         }
         else { // passwords match
           console.log("user login successful");
-          return res.success;
+          return res.json({msg: "success"});
         }
 
       }) // ----------
@@ -133,19 +135,57 @@ router.route('/login')
 router.route('/register')
 
   .post(function(req, res) {
+    console.log("grr: " + req.body.username);
+    email = validator.escape(req.body.username);
+    pass = validator.escape(req.body.password);
+    console.log("email: " + this.email + " pass: " + this.pass);
 
-    var email = req.body.username;
-    var pass = req.body.password;
-    console.log("email: " + email + " pass: " + pass);
+    if(!validator.isEmail(this.email)) {
+      return res.json({msg: "invalidEmail"});
+    }
 
     if (req.body.type === 'register') {
 
-        var newUser = new User({
+        /*var newUser = new User({
             username: email,
             password: pass,
             collections: []
-        });
+        });*/
 
+        User.findOne({username: this.email}, function(err, result) {
+          if(err) {
+            return res.json({msg: "error"});
+          }
+          console.log("RESULT:"  + result);
+
+          if(result) {
+            return res.json({msg: "taken"});
+          }
+          bcrypt.genSalt(8, function(err, salt) {
+            bcrypt.hash(this.pass, salt, function(err, hash) {
+              if(err) {
+                console.log(err);
+                return res.json({msg: "error"});
+              }
+              // set the password to the hash so we aren't storing it directly
+              this.pass = hash;
+              console.log(this.pass);
+              User.create({username: this.email, password: this.pass}, function(err, instance) {
+                if(err) {
+                  return res.json({msg: "error"});
+                  console.log("bleh in api");
+                }
+                else {
+                  return res.json({msg: "success"});
+                  console.log("woot");
+                }
+              })
+            })
+          })
+        })
+      }
+
+        /*
         nev.createTempUser(newUser, function(err, existingPersistentUser, newTempUser) {
             if (err) {
                 return res.status(404).send('ERROR: creating temp user FAILED');
@@ -185,7 +225,7 @@ router.route('/register')
         });
 
     // resend verification button was clicked
-    } else {
+  } /* else {
         nev.resendVerificationEmail(email, function(err, userFound) {
             if (err) {
                 return res.status(404).send('ERROR: resending verification email FAILED');
@@ -200,7 +240,7 @@ router.route('/register')
                 });
             }
         });
-    }
+    } */
 }); // ---- end of POST /register
 
 router.route('/email-verification/:URL')
@@ -228,11 +268,13 @@ router.route('/email-verification/:URL')
 
 router.route('/getUsers')
   .get(function(req, res) {
+
       /*User.create({username: "sarahwhelan@hotmail.ca", password:"hello"}, function(err, instance) {
         if(err)
           console.log()
         console.log("created");
       });*/
+
       User.find({}, function(err, users) {
         var userMap = {};
         users.forEach(function(user) {
@@ -242,10 +284,24 @@ router.route('/getUsers')
     });
   });
 
+router.route('/removeUser/:id') // FOR ADMIN USER TO REMOVE ACCOUNTS
+  .post(function(req, res) {
+    bye = req.params.id;
+    User.remove({_id: bye}, function(err) {
+      if(err) {
+        console.log("not deleted!");
+        return res.json({msg: 'woooops'});
+      }
+      else {
+        res.json({msg: 'wahooo'});
+      }
+    });
+  });
+
 app.use('/api', router);
 
 app.use(function (request, response, next) {
-    response.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    response.setHeader('Access-Control-Allow-Origin', '*');
     response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     response.header('Access-Control-Allow-Methods', 'POST, PATCH, GET, PUT, DELETE, OPTIONS');
     next();
