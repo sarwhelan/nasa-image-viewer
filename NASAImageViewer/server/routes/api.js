@@ -388,7 +388,7 @@ router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is u
   });
 // END OF /collections/:x route ------------------------------------------------
 
-router.route('/imagesInCollection/:id')
+router.route('/collectionInfo/:id')
   .get(function(req, res) {
     id = req.params.id;
     Collection.find({_id: id}, function(err, collection) {
@@ -400,6 +400,23 @@ router.route('/imagesInCollection/:id')
         res.send(collection);
       }
     })
+  })
+
+  .put(function(req, res) {
+    id = req.params.id;
+    name = req.body.name;
+    desc = req.body.desc;
+    imgs = req.body.imgs; // account for adding and deleting imgs
+    vis = req.body.vis;
+    Collection.update({_id: id},
+      {name: this.name, description: this.desc, visibility: this.vis, imgLinks: this.imgs},
+      function(err, resp) {
+        if(err) {
+          console.log("couldn't update");
+          res.json({msg: "unsuccessful"});
+        }
+        else res.json({msg: "success"});
+      })
   })
 
 // initial route for all routes is /api

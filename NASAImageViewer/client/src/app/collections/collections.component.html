@@ -8,7 +8,7 @@
     <h5>You don't have any collections yet! Click the button above to make some or search for images.</h5>
   </div>
 
-  <div *ngIf="readyToDisplay">
+  <div *ngIf="readyToDisplay" class="row">
     <div class="card-group">
       <div *ngFor="let coll of usersColl" id="collections">
         <div class="card" style="width: 15rem;">
@@ -16,41 +16,88 @@
           <div class="card-block">
             <h4 class="card-title">{{coll.name}}</h4>
             <p class="card-text">{{coll.rating}} stars</p>
-            <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="getImgsInCollection(coll.id)" class="btn btn-info">View Full Collection</button>
+            <button type="button" data-toggle="modal" data-target=".displayImgs" (click)="getImagesInCollection(coll.id)" class="btn btn-info">View Full Collection</button>
             <br><br>
-            <button type="button" data-toggle="model" data-target=".edit" class="btn btn-success">Edit Collection</button>
+            <button type="button" data-toggle="modal" data-target=".edit" (click)="getCollInfo(coll.id)" class="btn btn-success">Edit Collection</button>
+            <br><br>
+            <button type="button" data-toggle="modal" data-target=".delete" (click)="getCollInfo(coll.id)" class="btn btn-danger">Delete Collection</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div *ngIf="ready">
+<!--- display imgs in collection --->
+  <div>
+    <div class="modal fade displayImgs" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <h3 id="collName">{{collName}}</h3>
+          <ul>
+            <div *ngFor="let img of imgs">
+              <img src="{{img}}" id="pics">
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--- delete a collection confirmation modal --->
+  <div>
+    <div class="modal fade delete" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <h3 id="collName">Are you sure you want to delete {{collName}}?</h3>
+          <br>
+          <button onClick="window.location.reload()" type="button" class="btn btn-success" data-dismiss="modal" (click)="deleteCollection(id)">Yes, delete it.</button>
+          <br>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">No!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--- edit collection: change name and description, toggle visibility --->
+  <div>
     <div class="modal fade edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <h3 id="collName">{{collName}} Collection</h3>
-            <ul>
-              <div *ngFor="let img of imgs">
-                <img src="{{img}}" id="pics">
-              </div>
-            </ul>
+          <h3 id="collName">{{collName}}</h3>
+          <div class="form-group row">
+            <label for="cName" class="col-2 col-form-label">Name</label>
+            <div class="col-10">
+              <input class="form-control" type="text" value="{{collName}}" id="cName">
+            </div>
           </div>
+          <div class="form-group row">
+            <label for="description" class="col-2 col-form-label">Description</label>
+            <div class="col-10">
+              <input class="form-control" type="text" value="{{descr}}" id="description">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Visibility</label>
+            <div class="col-sm-4">
+              <label class="custom-control custom-radio">
+                <input id="radio1" name="radio" type="radio" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Public</span>
+              </label>
+              <label class="custom-control custom-radio active">
+                <input id="radio2" name="radio" type="radio" class="custom-control-input" checked="">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Private</span>
+              </label>
+            </div>
+          </div>
+          <button type="button" class="btn btn-success" data-dismiss="modal" aria-label="Save" (click)="editColl(id)">Save Changes</button>
         </div>
       </div>
+    </div>
   </div>
 
-  <div>
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <h3 id="collName">hi</h3>
-          </div>
-        </div>
-      </div>
-  </div>
-
-</div>
+</div> <!--- end of *ngIf="canAccess" --->
 
 <div *ngIf="!canAccess">
   <br><br>

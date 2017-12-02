@@ -21,7 +21,7 @@ export class LoadUserCollectionsService {
   }
 
   getCertainCollection(cID:String) {
-    var url = 'http://localhost:8080/api/imagesInCollection/' + cID;
+    var url = 'http://localhost:8080/api/collectionInfo/' + cID;
     return this.http.get(url)
       .map((res:any) => {
         return this.getData(res, "specific");
@@ -32,13 +32,25 @@ export class LoadUserCollectionsService {
     var url = 'http://localhost:8080/api/collections/' + username;
     return this.http.get(url)
       .map((res:any) => {
-        return this.getData(res, "topTen");
+        return this.getData(res, "topTen"); //
       })
   }
 
-  getData(res:any, t:String) { // we want the first img, the title, and the rating
+  setCollectionInfo() {
 
-      var obj, name, rating, img, id;
+  }
+
+  deleteColl(id:String) {
+    var url = 'http://localhost:8080/api/collections/' + id;
+    return this.http.delete(url)
+      .map((res:any) => {
+        return res;
+      })
+  }
+
+  getData(res:any, t:String) {
+
+      var obj, name, rating, img, id, descr, vis;
       var allKeys = Object.keys(res);
       var collections = [];
 
@@ -48,12 +60,14 @@ export class LoadUserCollectionsService {
         this.name = res[allKeys[i]].name;
         this.rating = res[allKeys[i]].rating;
         this.img = res[allKeys[i]].imgLinks[0];
-        if (t == "topTen") {
+        this.descr = res[allKeys[i]].description;
+        this.vis = res[allKeys[i]].visibility;
+        if (t != "specific") {
           this.img = (this.img).substr(1);
           this.img = (this.img).slice(0, -1);
           this.img = (this.img).split(',')[0];
         }
-        obj = {name: this.name, rating: this.rating, img: this.img, id: this.id}; // clear each iteration
+        obj = {name: this.name, rating: this.rating, img: this.img, id: this.id, descr: this.descr, vis: this.vis}; // clear each iteration
         collections.push(obj);
       }
 

@@ -17,37 +17,69 @@ import { RetrieveImagesService} from '../retrieve-images.service';
 })
 export class CollectionsComponent implements OnInit {
 
-  currentUser;
+  // set up stuff, used in constructor
   router;
   userServ;
   collectionServ;
   searchServ;
   currUser;
-  canAccess = true;
+
+  // stuff we display in HTML
   usersColl = [];
-  readyToDisplay = false; // used for showing collections made by the user
-  none = false;
+  imgs = [];
   collName;
-  ready;
+
+  // vars used in editing form, to display initial values
+  descr;
+  vis;
+
+  // variables for tracking stuff
+  canAccess = true; // checking if user is authenticated
+  readyToDisplay = false; // used for showing collections made by the user
+  none = false; // use if no collections made yet by user
+
 
   constructor(rt: Router, userService: UserService, cm: CommonModule, collServ: LoadUserCollectionsService, searchS: RetrieveImagesService) {
+    this.collectionServ = collServ;
     this.router = rt;
     this.userServ = userService;
-    this.collectionServ = collServ;
     this.searchServ = searchS;
   }
 
-  getImagesInCollection(id:String) {
+  getImagesInCollection(id:String) { // called when View Full Collection button is clicked
     var x;
     // sending the _id value of a collection to load-user-collection service
-    this.collectionServ.getCertainCollection(cID)
+    this.collectionServ.getCertainCollection(id)
       .subscribe(result => {
         console.log(result);
         this.collName = result[0].name;
         x = (result[0].img).substr(1);
         x = x.slice(0, -1);
         this.imgs = (x).split(",");
-        this.ready = true;
+      })
+  }
+
+  editColl(id:String) { // id is _id!!
+    this.collectionServ.getCertainCollection(id)
+      .subscribe(result => {
+
+      })
+  }
+
+  getCollInfo(id:String) {
+    this.collectionServ.getCertainCollection(id)
+      .subscribe(result => {
+        this.collName = result[0].name;
+        this.descr = result[0]. descr;
+        this.vis = result[0].vis;
+      })
+  }
+
+  deleteCollection(id:String) {
+    this.collectionServ.deleteColl(id)
+      .subscribe(result => {
+        if(result.msg == "unsuccessful")
+          console.log("error");
       })
   }
 
@@ -62,11 +94,9 @@ export class CollectionsComponent implements OnInit {
         this.usersColl = result;
         if(JSON.stringify(this.usersColl) == '[{}]') {
           this.none = true;
-          console.log("ugghhhhh?");
         }
         else {
           this.readyToDisplay = true;
-          console.log("should display now, " + JSON.stringify(this.usersColl));
         }
     })
 
