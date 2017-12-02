@@ -28,6 +28,14 @@ export class LoadUserCollectionsService {
       });
   }
 
+  getUsersCollections(username:String) {
+    var url = 'http://localhost:8080/api/collections/' + username;
+    return this.http.get(url)
+      .map((res:any) => {
+        return this.getData(res, "topTen");
+      })
+  }
+
   getData(res:any, t:String) { // we want the first img, the title, and the rating
 
       var obj, name, rating, img, id;

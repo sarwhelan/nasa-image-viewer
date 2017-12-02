@@ -27,15 +27,11 @@ export class LoginComponent implements OnInit {
     this.userServ = userService;
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.userServ.logOut();
+  }
 
-  login(email:string, password:string) { // called from HTML submit button click
-    // call /api/login and send parameters
-    // if login successful, redirect to their collections
-    // redirect to
-    // now we call the user service to help
-
-    // reset each time login is called
+  login(email:string, password:string) {
     this.loginError = false;
     this.noPass = false;
     this.noEmail = false;
@@ -50,14 +46,12 @@ export class LoginComponent implements OnInit {
     }
 
     this.userServ.login(email, password).subscribe(result => {
-      if(result) { // result is either TRUE if successful or UNDEFINED if unsuccessful
+      if(result) {
+        this.userServ.setCurrentUser(email);
         this.router.navigateByUrl('/collections');
-        console.log("success in login component");
       } else {
-        console.log("unsuccessful in login component");
-        this.loginError = true;
-      }
-
+          this.loginError = true;
+        }
     });
   }
 

@@ -1,3 +1,58 @@
-<p>
-  collections works!
-</p>
+<div *ngIf="canAccess">
+
+  <a id="button" class="btn btn-info" href="/search" role="button">Search for Images</a>
+  <a id="button" class="btn btn-warning" role="button">Create a New Collection</a>
+
+  <div *ngIf="none">
+    <br><br>
+    <h5>You don't have any collections yet! Click the button above to make some or search for images.</h5>
+  </div>
+
+  <div *ngIf="readyToDisplay">
+    <div class="card-group">
+      <div *ngFor="let coll of usersColl" id="collections">
+        <div class="card" style="width: 15rem;">
+          <img class="card-img-top" src="{{coll.img}}" alt="Card image cap">
+          <div class="card-block">
+            <h4 class="card-title">{{coll.name}}</h4>
+            <p class="card-text">{{coll.rating}} stars</p>
+            <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="getImgsInCollection(coll.id)" class="btn btn-info">View Full Collection</button>
+            <br><br>
+            <button type="button" data-toggle="model" data-target=".edit" class="btn btn-success">Edit Collection</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="ready">
+    <div class="modal fade edit" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <h3 id="collName">{{collName}} Collection</h3>
+            <ul>
+              <div *ngFor="let img of imgs">
+                <img src="{{img}}" id="pics">
+              </div>
+            </ul>
+          </div>
+        </div>
+      </div>
+  </div>
+
+  <div>
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <h3 id="collName">hi</h3>
+          </div>
+        </div>
+      </div>
+  </div>
+
+</div>
+
+<div *ngIf="!canAccess">
+  <br><br>
+  <h3>Hey you. How did you get here? You need to be <a href="/login">logged in</a> to view this page.</h3>
+</div>

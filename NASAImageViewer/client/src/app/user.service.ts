@@ -14,9 +14,7 @@ export class UserService {
   private pass= "";
   currentUser;
 
-  constructor(private http: HttpClient) {
-    this.loggedIn = !!localStorage.getItem('auth_token');
-  }
+  constructor(private http: HttpClient) { }
 
   createUser(email:string, password:string) {
     this.email = email;
@@ -33,41 +31,33 @@ export class UserService {
       .map((res: any) => {
         return res;
       })
-    }
+  }
 
-    /*
-      fetch('http://localhost:8080/api/register', {
-      method: 'post',
-      headers: {'Content-type':'application-json'},
-      body: JSON.stringify({username: this.email, password: this.pass, type: 'register'})
-    }).then(function(response){
-      console.log("response: " + response['msg']);
-      callBackFunction(response['msg']);
-    }).catch(function () {
-      console.log("error in createUser, userService");
-    })
-    */
+  setCurrentUser(username:string){
+      var d:Date = new Date();
+      d.setTime(d.getTime() + (24*60*60*1000));
+      var expires:string = "expires="+d.toUTCString();
+      document.cookie = "user=" + username + ";" + expires + ";path=/";
+  }
 
-
-  /*private extractMsg(res: Response) {
-      let body;
-      if (1) { // only get json if text exists
-          body = res.json();
+  getCurrentUser() {
+      var name:string = "user=";
+      // Get name portion of cookie
+      let ca = document.cookie.split(';');
+      for(var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') {
+              c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+              console.log(c.substring(name.length,c.length));
+              return c.substring(name.length,c.length);
+          }
       }
-      return body || {};
-  */
-
-  userLoggedIn() {
-    if (this.loggedIn) {
-      console.log(this.currentUser);
-      return this.currentUser;
-    }
-    else
-      return null;
+      return "";
   }
 
   login(email:string, password:string) {
-    console.log("in login() within user service");
     var userInfo = {
       'username': email,
       'password': password
@@ -76,19 +66,17 @@ export class UserService {
       .map((res:any) => {
         if(res.msg == "success") {
           localStorage.setItem('auth_token', res.auth_token);
+          console.log("merp" + localStorage.getItem('auth_token'));
           this.loggedIn = true;
           this.currentUser = userInfo.username;
-          console.log(this.userLoggedIn());
           return true;
         }
-        console.log(this.userLoggedIn());
         return false;
       })
   }
 
-  logout() {
-    this.loggedIn = false;
-    this.email = "";
+  logOut(){
+      document.cookie = "user=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
   }
 
 }
