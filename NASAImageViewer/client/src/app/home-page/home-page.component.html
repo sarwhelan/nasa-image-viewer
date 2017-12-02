@@ -19,9 +19,24 @@
         <div class="card-block">
           <h4 class="card-title">{{collection.name}}</h4>
           <p class="card-text">{{collection.rating}} stars</p>
-          <a href="#" class="btn btn-primary">View Full Collection</a>
+          <button type="button" data-toggle="modal" data-target=".bd-example-modal-lg" (click)="getImgsInCollection(collection.id)" class="btn btn-info">View Full Collection</button>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="ready">
+  <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <h3 id="collName">{{collName}} Collection</h3>
+          <ul>
+            <div *ngFor="let img of imgs">
+              <img src="{{img}}" id="pics">
+            </div>
+          </ul>
+        </div>
+      </div>
+    </div>
 </div>

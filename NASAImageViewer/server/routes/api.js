@@ -361,7 +361,7 @@ router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is u
     })
   }) // ---- end of DELETE /collections:x
 
-  .get(function(req, res) { // GET TOP 10 COLLECTIONS OR ALL COLLECTIONS BY A SPECIFIED USER
+  .get(function(req, res) { // GET TOP 10 COLLECTIONS OR ALL COLLECTIONS BY A SPECIFIED USER IF x == ten
     if (req.params.x == "ten") { // IF GETTING TOP 10...
       Collection.find({visibility: 'public'}).sort({rating: -1}).limit(10).exec(function(err, collections) {
         if(err) {
@@ -388,6 +388,19 @@ router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is u
   });
 // END OF /collections/:x route ------------------------------------------------
 
+router.route('/imagesInCollection/:id')
+  .get(function(req, res) {
+    id = req.params.id;
+    Collection.find({_id: id}, function(err, collection) {
+      if(err) {
+        console.log("error getting imgs in collection");
+        res.json({msg: "unsuccessful"});
+      } else {
+        console.log(collection);
+        res.send(collection);
+      }
+    })
+  })
 
 // initial route for all routes is /api
 app.use('/api', router);

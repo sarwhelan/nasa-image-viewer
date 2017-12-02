@@ -20,8 +20,11 @@ export class HomePageComponent implements OnInit {
 
   router;
   collectionServ;
-  collections = [];
+  collections = []; // for loading top 10 in ngOnInit()
+  imgs = [];
   readyToDisplay = false;
+  ready = false;
+  collName;
 
   constructor(r: Router, collectionS: LoadUserCollectionsService) {
     this.router = r;
@@ -34,6 +37,20 @@ export class HomePageComponent implements OnInit {
         this.collections = result;
       });
       this.readyToDisplay = true;
+  }
+
+  getImgsInCollection(cID: String) {
+    var x;
+    // sending the _id value of a collection to load-user-collection service
+    this.collectionServ.getCertainCollection(cID)
+      .subscribe(result => {
+        console.log(result);
+        this.collName = result[0].name;
+        x = (result[0].img).substr(1);
+        x = x.slice(0, -1);
+        this.imgs = (x).split(",");
+        this.ready = true;
+      })
   }
 
 

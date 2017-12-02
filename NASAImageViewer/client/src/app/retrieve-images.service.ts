@@ -46,7 +46,6 @@ export class RetrieveImagesService {
       var obj = JSON.parse(response);
       var numLinks = obj.collection.items.length;
       var linkNum;
-      //var imgLinks = [];
       for (linkNum = 0; linkNum < numLinks; linkNum++) {
         imgLinks.push(obj.collection.items[linkNum].links[0].href);
         console.log(imgLinks[linkNum]);
