@@ -1,11 +1,12 @@
 var User = require('../models/user');
-var Collection = require ('../models/collection');
+var Collection = require('../models/collection');
 var TempUser = require('../models/tempUser');
 var validator = require('validator');
 var express = require('express');
 var bcrypt = require('bcrypt');
 var router = express.Router();
 var app = express();
+var Logger = require('../models/logger');
 
 var mongoose = require('mongoose');
 try {
@@ -90,7 +91,6 @@ router.route('/login')
 
   .post(function(req, res) {
 
-    console.log("user: " + req.body.username + " pass: " + req.body.password);
     var usr = new User();
 
     // sanitize input
@@ -136,19 +136,12 @@ router.route('/register')
 
     email = validator.escape(req.body.username);
     pass = validator.escape(req.body.password);
-    console.log("email: " + this.email + " pass: " + this.pass);
 
     if(!validator.isEmail(this.email)) {
       return res.json({msg: "invalidEmail"});
     }
 
     if (req.body.type === 'register') {
-
-        /*var newUser = new User({
-            username: email,
-            password: pass,
-            collections: []
-        });*/
 
         User.findOne({username: this.email}, function(err, result) {
           if(err) {
@@ -238,7 +231,7 @@ router.route('/register')
 }); // ---- end of POST /register
 // END OF /register route ------------------------------------------------------
 
-router.route('/email-verification/:URL') // this isn't working
+router.route('/email-verification/:URL') // this isn't working :( :(
 
   .get(function(req, res) {
           var url = req.params.URL;
@@ -266,12 +259,6 @@ router.route('/email-verification/:URL') // this isn't working
 // returns list of all users in the system along with their hashed password
 router.route('/getUsers')
   .get(function(req, res) {
-
-      /*User.create({username: "sarahwhelan@hotmail.ca", password:"hello"}, function(err, instance) {
-        if(err)
-          console.log()
-        console.log("created");
-      });*/
 
       User.find({}, function(err, users) {
         var userMap = {};
@@ -315,10 +302,9 @@ router.route('/collections')
 
   // CREATE A NEW COLLECTION
   .post(function(req, res) {
-    console.log("ugh" + req.body.name + req.body.description);
     owner = req.body.owner;
-    name = req.body.name;
-    description = req.body.description;
+    name = validator.escape(req.body.name);
+    description = validator.escape(req.body.description);
     visibility = req.body.visibility;
     imgLinks = req.body.imgLinks;
     rating = req.body.rating;
@@ -361,7 +347,7 @@ router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is u
         return res.json({msg: "success"});
       }
     })
-  }) // ---- end of DELETE /collections:x
+  }) // ---- end of DELETE /collections/:x
 
   .get(function(req, res) { // GET TOP 10 COLLECTIONS OR ALL COLLECTIONS BY A SPECIFIED USER IF x == ten
     if (req.params.x == "ten") { // IF GETTING TOP 10...
@@ -405,15 +391,11 @@ router.route('/collectionInfo/:id')
   })
 
   .post(function(req, res) {
-    console.log("HELLLOO");
     id = req.params.id;
-    name = req.body.name;
-    console.log("name: " + name);
-    console.log("id: " + id);
-    desc = req.body.desc;
-    imgs = req.body.imgs; // account for adding and deleting imgs
+    name = validator.escape(req.body.name);
+    desc = validator.escape(req.body.desc);
+    imgs = req.body.imgs; // account for adding and deleting imgs!!
     vis = req.body.vis;
-    console.log("de: " + desc + " imgs: " + imgs + " vis: " + vis);
     Collection.update({_id: id},
       {name: this.name, description: this.desc, visibility: this.vis, imgLinks: this.imgs},
       function(err, resp) {
@@ -423,6 +405,34 @@ router.route('/collectionInfo/:id')
         }
         else res.json({msg: "success"});
       })
+  });
+// END OF /collectionInfo/:id ROUTE ------------------------------------------
+
+router.route('/disputes')
+  .put(function(req, res) {
+    Logger.create({
+      complaintBy: req.body.complaintBy,
+      dateOfComplaint: req.body.dateOfComplaint,
+      complaintType: req.body.complaintType,
+      collectionID: req.body.collectionID,
+      accusedUser: req.body.accusedUser
+    }, function(err, resp) {
+      if(err)
+        return res.json({msg: "unsuccessful complaint log"});
+      else {
+        return res.json({msg: "successfully logged complaint"});
+      }
+    })
+  })
+
+  .get(function(req, res) {
+    Logger.find({}, function(err, disputes) {
+      var disputeMap = {};
+      disputes.forEach(function(dispute) {
+        disputeMap[dispute._id] = dispute;
+      });
+      res.send(disputeMap);
+    })
   })
 
 // initial route for all routes is /api
