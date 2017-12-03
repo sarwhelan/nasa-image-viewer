@@ -405,9 +405,12 @@ router.route('/collectionInfo/:id')
   .put(function(req, res) {
     id = req.params.id;
     name = req.body.name;
+    console.log("name: " + name);
+    console.log("id: " + id);
     desc = req.body.desc;
     imgs = req.body.imgs; // account for adding and deleting imgs
     vis = req.body.vis;
+    console.log("de: " + desc + " imgs: " + imgs + " vis: " + vis);
     Collection.update({_id: id},
       {name: this.name, description: this.desc, visibility: this.vis, imgLinks: this.imgs},
       function(err, resp) {

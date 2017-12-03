@@ -21,6 +21,10 @@ export class SearchComponent implements OnInit {
     this.links = this.serv.getImages(this.searchWords);
   }
 
+  /*displayImg(link : String) {
+
+  }*/
+
   ngOnInit() { }
 
 }

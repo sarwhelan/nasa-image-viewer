@@ -4,6 +4,7 @@ import { RouterModule }   from '@angular/router';
 import { routing } from './app.routes';
 import { HttpModule } from '@angular/http';
 import { HttpClientModule } from "@angular/common/http";
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { SearchComponent } from './search/search.component';
@@ -35,7 +36,8 @@ import { LoadUserCollectionsService } from './load-user-collections.service';
     HttpClientModule,
     HttpModule,
     routing,
-    CommonModule
+    CommonModule,
+    FormsModule
   ],
   providers: [RetrieveImagesService, UserService, LoadUserCollectionsService],
   bootstrap: [AppComponent]

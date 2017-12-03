@@ -4,7 +4,7 @@
   <div class="row">
     <div *ngFor="let link of links" class="pics">
         <!--img src='{{link}}'/>-->
-        <img src='{{link}}'/>
+        <input type="image" src='{{link}}' (click)="displayImg(link)"/>
     </div>
   </div>
 </div>

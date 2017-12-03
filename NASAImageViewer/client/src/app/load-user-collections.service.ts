@@ -13,18 +13,11 @@ export class LoadUserCollectionsService {
 
   constructor(private http: HttpClient) { }
 
+  // for getting COLLECTIONS with one img to display
   getTopTen() {
     return this.http.get('http://localhost:8080/api/collections/ten')
       .map((res:any) => {
-        return this.getData(res, "topTen");
-      });
-  }
-
-  getCertainCollection(cID:String) {
-    var url = 'http://localhost:8080/api/collectionInfo/' + cID;
-    return this.http.get(url)
-      .map((res:any) => {
-        return this.getData(res, "specific");
+        return this.getData(res, "one");
       });
   }
 
@@ -32,12 +25,30 @@ export class LoadUserCollectionsService {
     var url = 'http://localhost:8080/api/collections/' + username;
     return this.http.get(url)
       .map((res:any) => {
-        return this.getData(res, "topTen"); //
+        return this.getData(res, "one"); //
       })
   }
+  // -------------------------------------------------
 
-  setCollectionInfo() {
+  // get ALL things to do with a collection that we care about, including ALL of the string containing the img links
+  getCertainCollection(cID:String) {
+    var url = 'http://localhost:8080/api/collectionInfo/' + cID;
+    return this.http.get(url)
+      .map((res:any) => {
+          console.log("here" + JSON.stringify(this.getData(res, "many")));
+          return this.getData(res, "many");
+      });
+  }
+  // -------------------------------------------------
 
+  setCollectionInfo(id:String, jsonMsg:any) {
+    console.log(id);
+    var url = 'http://localhost:8080/api/collectionInfo/' + id;
+    console.log(url);
+    return this.http.put(url, jsonMsg)
+      .map((res:any) => {
+        return res;
+      })
   }
 
   deleteColl(id:String) {
@@ -59,15 +70,16 @@ export class LoadUserCollectionsService {
         this.id = this.id._id;
         this.name = res[allKeys[i]].name;
         this.rating = res[allKeys[i]].rating;
+        console.log("sigh")
         this.img = res[allKeys[i]].imgLinks[0];
         this.descr = res[allKeys[i]].description;
         this.vis = res[allKeys[i]].visibility;
-        if (t != "specific") {
+        if (t == "one") { // limit to one img to be used as cover photo
           this.img = (this.img).substr(1);
           this.img = (this.img).slice(0, -1);
           this.img = (this.img).split(',')[0];
         }
-        obj = {name: this.name, rating: this.rating, img: this.img, id: this.id, descr: this.descr, vis: this.vis}; // clear each iteration
+        obj = {name: this.name, rating: this.rating, img: this.img, id: this.id, descr: this.descr, vis: this.vis};
         collections.push(obj);
       }
 
