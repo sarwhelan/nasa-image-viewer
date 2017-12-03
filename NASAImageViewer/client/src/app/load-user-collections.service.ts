@@ -32,6 +32,7 @@ export class LoadUserCollectionsService {
 
   // get ALL things to do with a collection that we care about, including ALL of the string containing the img links
   getCertainCollection(cID:String) {
+  console.log("get coll info" + cID);
     var url = 'http://localhost:8080/api/collectionInfo/' + cID;
     return this.http.get(url)
       .map((res:any) => {
@@ -41,11 +42,10 @@ export class LoadUserCollectionsService {
   }
   // -------------------------------------------------
 
-  setCollectionInfo(id:String, jsonMsg:any) {
-    console.log(id);
+  setCollectionInfo(id:String, jsonMsg:JSON) {
+    console.log("set coll info");
     var url = 'http://localhost:8080/api/collectionInfo/' + id;
-    console.log(url);
-    return this.http.put(url, jsonMsg)
+    return this.http.post(url, jsonMsg)
       .map((res:any) => {
         return res;
       })
@@ -64,20 +64,26 @@ export class LoadUserCollectionsService {
       var obj, name, rating, img, id, descr, vis;
       var allKeys = Object.keys(res);
       var collections = [];
+      console.log("merp: " + JSON.stringify(res));
 
       for(var i = 0; i < allKeys.length; i++) {
         this.id = res[allKeys[i];
         this.id = this.id._id;
         this.name = res[allKeys[i]].name;
         this.rating = res[allKeys[i]].rating;
-        console.log("sigh")
-        this.img = res[allKeys[i]].imgLinks[0];
-        this.descr = res[allKeys[i]].description;
-        this.vis = res[allKeys[i]].visibility;
-        if (t == "one") { // limit to one img to be used as cover photo
-          this.img = (this.img).substr(1);
-          this.img = (this.img).slice(0, -1);
-          this.img = (this.img).split(',')[0];
+        console.log("HIII: " + res[allKeys[i]].imgLinks);
+        if (res[allKeys[i]].imgLinks == "") {
+          console.log("yep");
+        }
+        else {
+          this.img = res[allKeys[i]].imgLinks[0];
+          this.descr = res[allKeys[i]].description;
+          this.vis = res[allKeys[i]].visibility;
+          if (t == "one") { // limit to one img to be used as cover photo
+            this.img = (this.img).substr(1);
+            this.img = (this.img).slice(0, -1);
+            this.img = (this.img).split(',')[0];
+          }
         }
         obj = {name: this.name, rating: this.rating, img: this.img, id: this.id, descr: this.descr, vis: this.vis};
         collections.push(obj);

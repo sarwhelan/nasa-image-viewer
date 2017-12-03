@@ -1,7 +1,7 @@
 <div *ngIf="canAccess">
 
   <a id="button" class="btn btn-info" href="/search" role="button">Search for Images</a>
-  <a id="button" class="btn btn-warning" role="button">Create a New Collection</a>
+  <a id="button" class="btn btn-warning" role="button" data-toggle="modal" data-target=".newCollection">Create a New Collection</a>
 
   <div *ngIf="none">
     <br><br>
@@ -16,12 +16,51 @@
           <div class="card-block">
             <h4 class="card-title">{{coll.name}}</h4>
             <p class="card-text">{{coll.rating}} stars</p>
-            <button type="button" data-toggle="modal" data-target=".displayImgs" (click)="getImagesInCollection(coll.id)" class="btn btn-info">View Full Collection</button>
+            <button type="button" data-toggle="modal" data-target=".displayImgs" (click)="getCollInfo(coll.id)" (click)="getImagesInCollection(coll.id)" class="btn btn-info">View Full Collection</button>
             <br><br>
             <button type="button" data-toggle="modal" data-target=".edit" (click)="getCollInfo(coll.id)" class="btn btn-success">Edit Collection</button>
             <br><br>
             <button type="button" data-toggle="modal" data-target=".delete" (click)="getCollInfo(coll.id)" class="btn btn-danger">Delete Collection</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!--- new collection --->
+  <div>
+    <div class="modal fade newCollection" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <h3>New Collection</h3>
+          <div class="form-group row">
+            <label for="cName" class="col-2 col-form-label">Name</label>
+            <div class="col-10">
+              <input id="newName" name="cNamex" class="form-control" type="text" placeholder="Collection Name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="description" class="col-2 col-form-label">Description</label>
+            <div class="col-10">
+              <input id="newDesc" name="cDescx" class="form-control" type="text" placeholder="Description">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Visibility</label>
+            <div class="col-sm-4">
+              <label class="custom-control custom-radio">
+                <input id="radio1" name="radio" type="radio" class="custom-control-input" (change)="onSelChange('publicNow')">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Public</span>
+              </label>
+              <label class="custom-control custom-radio active">
+                <input id="radio2" name="radio" type="radio" class="custom-control-input" checked="" (change)="onSelChange('privateNow')">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Private</span>
+              </label>
+            </div>
+          </div>
+          <button onClick="window.location.reload()" type="button" class="btn btn-success" data-dismiss="modal" aria-label="Save" (click)="newCollection()">Save Changes</button>
         </div>
       </div>
     </div>
@@ -36,6 +75,7 @@
           <ul>
             <div *ngFor="let img of imgs">
               <img src="{{img}}" id="pics">
+              <button type="button" class="btn btn-danger" (click)="deleteImg(img)">Delete the Image Shown Above</button>
             </div>
           </ul>
         </div>
@@ -50,7 +90,7 @@
         <div class="modal-content">
           <h3 id="collName">Are you sure you want to delete {{collName}}?</h3>
           <br>
-          <button onClick="window.location.reload()" type="button" class="btn btn-success" data-dismiss="modal" (click)="deleteCollection(id)">Yes, delete it.</button>
+          <button onClick="window.location.reload()" type="button" class="btn btn-success" data-dismiss="modal" (click)="deleteCollection()">Yes, delete it.</button>
           <br>
           <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">No!</button>
         </div>

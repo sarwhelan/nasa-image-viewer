@@ -18,6 +18,7 @@ import { CollectionsComponent } from './collections/collections.component';
 import { CommonModule } from '@angular/common';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { LoadUserCollectionsService } from './load-user-collections.service';
+import { EditCollectionsService } from './edit-collections.service'
 
 
 @NgModule({
@@ -39,7 +40,7 @@ import { LoadUserCollectionsService } from './load-user-collections.service';
     CommonModule,
     FormsModule
   ],
-  providers: [RetrieveImagesService, UserService, LoadUserCollectionsService],
+  providers: [RetrieveImagesService, UserService, LoadUserCollectionsService, EditCollectionsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

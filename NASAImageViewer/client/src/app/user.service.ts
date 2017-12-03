@@ -65,8 +65,6 @@ export class UserService {
     return this.http.post('http://localhost:8080/api/login', userInfo)
       .map((res:any) => {
         if(res.msg == "success") {
-          localStorage.setItem('auth_token', res.auth_token);
-          console.log("merp" + localStorage.getItem('auth_token'));
           this.loggedIn = true;
           this.currentUser = userInfo.username;
           return true;

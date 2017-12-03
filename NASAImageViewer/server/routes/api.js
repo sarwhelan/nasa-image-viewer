@@ -317,8 +317,8 @@ router.route('/collections')
   .post(function(req, res) {
     console.log("ugh" + req.body.name + req.body.description);
     owner = req.body.owner;
-    name = validator.escape(req.body.name);
-    description = validator.escape(req.body.description);
+    name = req.body.name;
+    description = req.body.description;
     visibility = req.body.visibility;
     imgLinks = req.body.imgLinks;
     rating = req.body.rating;
@@ -337,7 +337,7 @@ router.route('/collections')
         console.log("new collection not created");
         return res.json({msg: "unsuccessful"});
       }
-      if(instance) {
+      else {
         console.log("collection created");
         return res.json({msg: "success"});
       }
@@ -348,7 +348,9 @@ router.route('/collections')
 
 router.route('/collections/:x') // in DELETE, x is collection ID, in GET, x is username
   .delete(function(req, res) { //  DELETE A COLLECTION BASED ON COLLECTION _ID
+
     id = req.params.x;
+    console.log(id);
     Collection.remove({_id: id}, function(err, resp) {
       if(err){
         console.log("error in deleting individual collection");
@@ -402,7 +404,8 @@ router.route('/collectionInfo/:id')
     })
   })
 
-  .put(function(req, res) {
+  .post(function(req, res) {
+    console.log("HELLLOO");
     id = req.params.id;
     name = req.body.name;
     console.log("name: " + name);

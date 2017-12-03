@@ -14,6 +14,23 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <img src="{{currLink}}" id="full">
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".addImg" (click)="getCollections()">Add Image to Existing Collection</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="modal fade addImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <br>
+        <h4>Which collection do you want to add this image to?</h4>
+        <br>
+        <div *ngFor="let coll of collNames">
+          <button data-dismiss="modal" type="button" class="btn btn-secondary" (click)="pickedColl(coll)">{{coll}}</button>
+          <br><br>
+        </div>
       </div>
     </div>
   </div>
