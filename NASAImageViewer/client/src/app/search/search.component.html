@@ -4,7 +4,17 @@
   <div class="row">
     <div *ngFor="let link of links" class="pics">
         <!--img src='{{link}}'/>-->
-        <input type="image" src='{{link}}' (click)="displayImg(link)"/>
+        <input class="pics" type="image" data-toggle="modal" data-target=".seeImg" src='{{link}}' (click)="displayImg(link)"/>
+    </div>
+  </div>
+</div>
+
+<div>
+  <div class="modal fade seeImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <img src="{{currLink}}" id="full">
+      </div>
     </div>
   </div>
 </div>

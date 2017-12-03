@@ -11,6 +11,7 @@ export class SearchComponent implements OnInit {
   searchWords;
   serv;
   links; // array holding each link as a string
+  currLink;
 
   constructor(imgServices : RetrieveImagesService) {
     this.serv = imgServices;
@@ -21,9 +22,9 @@ export class SearchComponent implements OnInit {
     this.links = this.serv.getImages(this.searchWords);
   }
 
-  /*displayImg(link : String) {
-
-  }*/
+  displayImg(link : String) {
+    this.currLink = link;
+  }
 
   ngOnInit() { }
 
