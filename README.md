@@ -8,6 +8,8 @@ cd ./client [enter] ng serve
 cd ./server [enter] node server.js
 mongod
 ```
+###### Now go to http://localhost:4200 and enjoy!
+
 
 ## Assumptions/Notes Regarding Requirements
 ### 1. Authentication method
