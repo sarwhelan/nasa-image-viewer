@@ -7,7 +7,6 @@ import { HttpClientModule } from "@angular/common/http";
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
 import { LoadUserCollectionsService } from '../load-user-collections.service';
 import { RetrieveImagesService} from '../retrieve-images.service';
 import { NgModule } from '@angular/core';
@@ -90,8 +89,8 @@ export class CollectionsComponent implements OnInit {
     var imgList = [];
     var origImages = [];
     var toSend = {};
-    var cName = document.getElementById('cName').value;
-    var cDesc = document.getElementById('cDesc').value;
+    var cName = (<HTMLInputElement>document.getElementById('cName')).value;
+    var cDesc = (<HTMLInputElement>document.getElementById('cDesc')).value;
 
     this.collectionServ.getCertainCollection(this.currID)
       .subscribe(result => {
@@ -127,15 +126,15 @@ export class CollectionsComponent implements OnInit {
   deleteImg(link:String) {
   this.editCollServ.editCollection(this.currID, this.collName, this.descr, this.vis, null, link)
     .subscribe(result => {
-      console.log("made it back");d
+      console.log("made it back");
     })
 
   }
 
   newCollection() {
     var owner = this.userServ.getCurrentUser();
-    var n = document.getElementById('newName').value;
-    var d = document.getElementById('newDesc').value;
+    var n = (<HTMLInputElement>document.getElementById('newName')).value;
+    var d = (<HTMLInputElement>document.getElementById('newDesc')).value;
     var imgLink = 'https://images-assets.nasa.gov/image/PIA19048/PIA19048~thumb.jpg';
     var imgs = ['['+imgLink+']']; // send default image for collection card to display
     var r = 5;

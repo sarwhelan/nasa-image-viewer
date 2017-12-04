@@ -9,7 +9,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { LoadUserCollectionsService } from './load-user-collections.service';
 import { RetrieveImagesService} from './retrieve-images.service';
-import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Injectable()

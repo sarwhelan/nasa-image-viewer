@@ -67,7 +67,7 @@ export class LoadUserCollectionsService {
       console.log("merp: " + JSON.stringify(res));
 
       for(var i = 0; i < allKeys.length; i++) {
-        this.id = res[allKeys[i];
+        this.id = res[allKeys[i]];
         this.id = this.id._id;
         this.name = res[allKeys[i]].name;
         this.rating = res[allKeys[i]].rating;
