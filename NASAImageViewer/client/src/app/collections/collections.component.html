@@ -75,7 +75,7 @@
           <ul>
             <div *ngFor="let img of imgs">
               <img src="{{img}}" id="pics">
-              <button type="button" class="btn btn-danger" (click)="deleteImg(img)">Delete the Image Shown Above</button>
+              <button onClick="window.location.reload()" type="button" class="btn btn-danger" (click)="deleteImg(img)">Delete Image</button>
             </div>
           </ul>
         </div>
