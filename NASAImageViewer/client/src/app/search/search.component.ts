@@ -19,8 +19,15 @@ export class SearchComponent implements OnInit {
   userServ;
   collNames = [];
   ids = [];
+  currUser;
+  canAccess = true;
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.currUser = this.userServ.getCurrentUser();
+    if(this.currUser == "") {
+      this.canAccess = false;
+    }
+  }
 
   constructor(edit: EditCollectionsService, imgServices: RetrieveImagesService, userCollS: LoadUserCollectionsService, us: UserService) {
     this.serv = imgServices;

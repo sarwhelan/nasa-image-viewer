@@ -1,37 +1,46 @@
-<input #searchWords type="text" id="searchInput" placeholder="search">
-<button (click)="sendSearchWords(searchWords.value)">search!</button>
-<div class="picArea">
-  <div class="row">
-    <div *ngFor="let link of links" class="pics">
-        <!--img src='{{link}}'/>-->
-        <input class="pics" type="image" data-toggle="modal" data-target=".seeImg" src='{{link}}' (click)="displayImg(link)"/>
-    </div>
-  </div>
-</div>
+<div *ngIf="canAccess">
 
-<div>
-  <div class="modal fade seeImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <img src="{{currLink}}" id="full">
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target=".addImg" (click)="getCollections()">Add Image to Existing Collection</button>
+  <input #searchWords type="text" id="searchInput" placeholder="search">
+  <button (click)="sendSearchWords(searchWords.value)">search!</button>
+  <div class="picArea">
+    <div class="row">
+      <div *ngFor="let link of links" class="pics">
+          <!--img src='{{link}}'/>-->
+          <input class="pics" type="image" data-toggle="modal" data-target=".seeImg" src='{{link}}' (click)="displayImg(link)"/>
       </div>
     </div>
   </div>
-</div>
 
-<div>
-  <div class="modal fade addImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <br>
-        <h4>Which collection do you want to add this image to?</h4>
-        <br>
-        <div *ngFor="let coll of collNames">
-          <button onClick="addImg.location.reload(true)" data-dismiss="modal" type="button" class="btn btn-secondary" (click)="pickedColl(coll)">{{coll}}</button>
-          <br><br>
+  <div>
+    <div class="modal fade seeImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <img src="{{currLink}}" id="full">
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target=".addImg" (click)="getCollections()">Add Image to Existing Collection</button>
         </div>
       </div>
     </div>
   </div>
+
+  <div>
+    <div class="modal fade addImg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <br>
+          <h4>Which collection do you want to add this image to?</h4>
+          <br>
+          <div *ngFor="let coll of collNames">
+            <button onClick="addImg.location.reload(true)" data-dismiss="modal" type="button" class="btn btn-secondary" (click)="pickedColl(coll)">{{coll}}</button>
+            <br><br>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="!canAccess">
+  <br><br>
+  <h3>Hey you. How did you get here? You need to be <a href="/login">logged in</a> to view this page.</h3>
 </div>
