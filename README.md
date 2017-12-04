@@ -1,5 +1,8 @@
 # NASA Image Viewer --- SE 3316A Web Technologies Final Project 2017
 
+## Instructions on Getting NASA Image Viewer Onto Your Machine
+
+
 ## Assumptions/Notes Regarding Requirements
 ### 1. Authentication method
 a) Login and Register options are shown on the Home-Page.
@@ -18,7 +21,7 @@ a) The radio button for the "Create Collection" modal will not go to the "privat
 ### 5. Site administrator functionality
 a) and b) I am assuming that the administrator is myself or someone at the same skill level regarding HTML and MEAN stack knowledge. Therefore, myself or someone else will be capable of going into the HTML file and editing the DMCA and/or Privacy Policy section.
 
-c) A document providing information on workflow and usage of tools is provided in the "NotesToAdmin.txt" file.
+c) A document providing information on workflow and usage of tools is provided in the "NotesToAdmin.md" file.
 
 
-Since all complaints/infringement notices/take-down requests are via email, the administrator will enter these into the database manually via Postman. Instructions are included in "NotesToAdmin.txt"
+Since all complaints/infringement notices/take-down requests are via email, the administrator will enter these into the database manually via Postman. Instructions are included in "NotesToAdmin.md" file.

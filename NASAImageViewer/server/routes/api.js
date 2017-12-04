@@ -433,6 +433,18 @@ router.route('/disputes')
       });
       res.send(disputeMap);
     })
+  });
+
+router.route('/findCollectionByName/:name')
+  .get(function(req, res) {
+    var cName = req.params.name;
+    Collection.find({name: cName}, function(err, collections) {
+      var collectionMap = {};
+      collections.forEach(function(collection) {
+        collectionMap[collection._id] = collection;
+      });
+      res.send(collectionMap);
+    })
   })
 
 // initial route for all routes is /api

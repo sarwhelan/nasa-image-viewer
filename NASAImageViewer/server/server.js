@@ -5,6 +5,8 @@ var validator = require('validator'); // IMPORTANT: USE THIS TO SANITIZE INPUT
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+const cors = require('cors');
+app.use(cors());
 
 var port = process.env.PORT || 8080;
 
