@@ -1,7 +1,13 @@
 # NASA Image Viewer --- SE 3316A Web Technologies Final Project 2017
 
-## Instructions on Getting NASA Image Viewer Onto Your Machine
-
+## Instructions for Getting NASA Image Viewer Onto Your Machine
+###### Clone this repo onto your machine. You'll also need all the dependencies of a MEAN stack application and CORS.
+###### Open 3 separate terminal windows. In each, navigate to the location of the cloned repo. Type one of these statements in each:
+```
+cd ./client [enter] ng serve
+cd ./server [enter] node server.js
+mongod
+```
 
 ## Assumptions/Notes Regarding Requirements
 ### 1. Authentication method
